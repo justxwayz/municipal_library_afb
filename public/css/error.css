@@ -1,0 +1,27 @@
+.error-page {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.error-page h1 {
+    font-size: 100px;
+    color: #e74c3c;
+}
+
+.error-page h2 {
+    font-size: 24px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.error-page .btn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.error-page .btn:hover {
+    background-color: #2980b9;
+}

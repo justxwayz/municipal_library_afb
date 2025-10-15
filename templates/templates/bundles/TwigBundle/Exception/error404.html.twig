@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur 404 - Page introuvable{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/error.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="error-page">
+        <h1>404</h1>
+        <h2>Oups ! La page que vous cherchez n’existe pas.</h2>
+        <a href="{{ path('app_home') }}" class="btn">Retour à l’accueil</a>
+    </div>
+{% endblock %}

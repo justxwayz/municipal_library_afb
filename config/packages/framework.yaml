@@ -11,6 +11,15 @@ framework:
     #esi: true
     #fragments: true
 
+    content_security_policy:
+        report_only: false
+        directives:
+            default-src: "'self'"
+            script-src: "'self' https://trusted.cdn.com"
+            img-src: "'self'"
+            style-src: "'self'"
+            font-src: "'self'"
+
 when@test:
     framework:
         test: true

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur 403 - Accès refusé{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/error.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="error-page">
+        <h1>403</h1>
+        <h2>Vous n’avez pas les droits nécessaires pour accéder à cette ressource.</h2>
+        <a href="{{ path('app_home') }}" class="btn">Retour à l’accueil</a>
+    </div>
+{% endblock %}
