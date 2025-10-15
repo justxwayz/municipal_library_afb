@@ -7,10 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,16 +24,14 @@ class User
     #[Assert\Email(message: "Veuillez saisir une adresse e-mail valide.")]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le mot de passe est obligatoire.")]
-    #[Assert\Length(
-        min: 6,
-        minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères."
+    #[ORM\Column(length: 255)]    #[Assert\Length(
+        max: 6,
+        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
     )]
     private ?string $password = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: "Veuillez sélectionner au moins un rôle.")]
+//    #[Assert\NotBlank(message: "Veuillez sélectionner au moins un rôle.")]
     private array $roles = [];
 
     #[ORM\Column(length: 50)]
@@ -111,7 +111,10 @@ class User
 
     public function getRoles(): array
     {
-        return $this->roles;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
     public function setRoles(array $roles): static
@@ -234,5 +237,14 @@ class User
         }
 
         return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
     }
 }

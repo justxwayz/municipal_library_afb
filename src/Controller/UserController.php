@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/user')]
@@ -23,7 +24,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $user->setCreatedAt(new \DateTimeImmutable());
@@ -32,17 +33,23 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $entityManager->persist($user);
-                $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('password')->getData();
 
-                $this->addFlash('success', 'L’utilisateur a bien été créé.');
-                return $this->redirectToRoute('app_user_index');
-            } else {
-                $this->addFlash('error', 'Veuillez corriger les erreurs du formulaire.');
+            $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+
+            if (empty($user->getRoles())) {
+                $user->setRoles(['ROLE_USER']);
             }
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'L’utilisateur a bien été créé.');
+
+            return $this->redirectToRoute('app_user_index');
         }
+
         return $this->render('user/new.html.twig', [
             'user' => $user,
             'form' => $form,
@@ -65,6 +72,10 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
+                if (empty($user->getRoles())) {
+                    $user->setRoles(['ROLE_USER']);
+                }
+
                 $user->setUpdatedAt(new \DateTimeImmutable());
                 $entityManager->flush();
 
