@@ -26,16 +26,23 @@ class UserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
+        $user->setCreatedAt(new \DateTimeImmutable());
+        $user->setUpdatedAt(new \DateTimeImmutable());
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+                $this->addFlash('success', 'L’utilisateur a bien été créé.');
+                return $this->redirectToRoute('app_user_index');
+            } else {
+                $this->addFlash('error', 'Veuillez corriger les erreurs du formulaire.');
+            }
         }
-
         return $this->render('user/new.html.twig', [
             'user' => $user,
             'form' => $form,
@@ -56,10 +63,16 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $user->setUpdatedAt(new \DateTimeImmutable());
+                $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+                $this->addFlash('success', 'L’utilisateur a bien été mis à jour.');
+                return $this->redirectToRoute('app_user_index');
+            } else {
+                $this->addFlash('error', 'Veuillez corriger les erreurs du formulaire.');
+            }
         }
 
         return $this->render('user/edit.html.twig', [

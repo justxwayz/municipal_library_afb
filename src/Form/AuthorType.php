@@ -22,12 +22,12 @@ class AuthorType extends AbstractType
             ->add('updatedAt')
             ->add('country', EntityType::class, [
                 'class' => Country::class,
-'choice_label' => 'id',
+                'choice_label' => 'id',
             ])
             ->add('books', EntityType::class, [
                 'class' => Book::class,
-'choice_label' => 'id',
-'multiple' => true,
+                'choice_label' => 'id',
+                'multiple' => true,
             ])
         ;
     }

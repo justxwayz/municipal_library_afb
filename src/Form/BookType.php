@@ -11,36 +11,59 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class BookType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('isbn')
-            ->add('title')
-            ->add('summary')
-            ->add('publicationYear')
-            ->add('issueDate')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('isbn', null, [
+                'required' => true,
+                'label' => 'ISBN',
+            ])
+            ->add('title', null, [
+                'required' => true,
+                'label' => 'Titre',
+            ])
+            ->add('summary', null, [
+                'required' => true,
+                'label' => 'Résumé',
+            ])
+            ->add('publicationYear', null, [
+                'required' => true,
+                'label' => 'Année de publication',
+            ])
+            ->add('issueDate', DateType::class, [
+                'required' => true,
+                'label' => 'Date d\'emprunt',
+            ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-'choice_label' => 'id',
+                'choice_label' => 'id',
+                'label' => 'Utilisateur',
             ])
             ->add('genres', EntityType::class, [
                 'class' => Genre::class,
-'choice_label' => 'id',
-'multiple' => true,
+                'choice_label' => 'id',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => true,
+                'label' => 'Genres',
             ])
             ->add('authors', EntityType::class, [
                 'class' => Author::class,
-'choice_label' => 'id',
-'multiple' => true,
+                'choice_label' => 'id',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => true,
+                'label' => 'Auteurs',
             ])
             ->add('cover', EntityType::class, [
                 'class' => Cover::class,
-'choice_label' => 'id',
+                'choice_label' => 'id',
+                'required' => true,
+                'label' => 'Couverture',
             ])
         ;
     }
@@ -49,6 +72,7 @@ class BookType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Book::class,
+            'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
 }

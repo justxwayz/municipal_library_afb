@@ -26,14 +26,22 @@ class BookController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $book = new Book();
+        $book -> setCreatedAt(new \DateTimeImmutable());
+        $book -> setUpdatedAt(new \DateTimeImmutable());
+
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($book);
-            $entityManager->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $entityManager->persist($book);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('app_book_index', [], Response::HTTP_SEE_OTHER);
+                $this->addFlash('success', 'Le livre a bien été créé.');
+                return $this->redirectToRoute('app_book_index');
+            } else {
+                $this->addFlash('error', 'Veuillez corriger les erreurs du formulaire.');
+            }
         }
 
         return $this->render('book/new.html.twig', [
@@ -57,6 +65,7 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $book -> setUpdatedAt(new \DateTimeImmutable());
             $entityManager->flush();
 
             return $this->redirectToRoute('app_book_index', [], Response::HTTP_SEE_OTHER);

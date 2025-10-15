@@ -18,8 +18,8 @@ class GenreType extends AbstractType
             ->add('description')
             ->add('books', EntityType::class, [
                 'class' => Book::class,
-'choice_label' => 'id',
-'multiple' => true,
+                'choice_label' => 'id',
+                'multiple' => true,
             ])
         ;
     }
