@@ -20,6 +20,11 @@
                value="{{ csrf_token('authenticate') }}"
         >
 
+        <div>
+            <input type="checkbox" id="remember_me" name="_remember_me">
+            <label for="remember_me">Se souvenir de moi</label>
+        </div>
+
         <button type="submit">Se connecter</button>
     </form>
 {% endblock %}
