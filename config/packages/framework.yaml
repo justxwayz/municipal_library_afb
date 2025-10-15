@@ -1,24 +1,10 @@
-# see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
-    #csrf_protection: true
+    csrf_protection: true
 
-    # Note that the session will be started ONLY if you read or write from it.
     session:
         cookie_lifetime: 172800
         gc_maxlifetime: 172800
-
-    #esi: true
-    #fragments: true
-
-    content_security_policy:
-        report_only: false
-        directives:
-            default-src: "'self'"
-            script-src: "'self' https://trusted.cdn.com"
-            img-src: "'self'"
-            style-src: "'self'"
-            font-src: "'self'"
 
 when@test:
     framework:
