@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block body %}
+    <div class="dashboard-container">
+        <h1>Bienvenue sur le Tableau de bord</h1>
+
+        <div class="dashboard-widgets">
+            <div class="widget">
+                <h2>Utilisateurs</h2>
+                <p>Nombre total : {{ usersCount }}</p>
+            </div>
+
+            <div class="widget">
+                <h2>Livres</h2>
+                <p>Nombre total : {{ booksCount }}</p>
+            </div>
+
+            <div class="widget">
+                <h2>Auteurs</h2>
+                <p>Nombre total : {{ authorsCount }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
