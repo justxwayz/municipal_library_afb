@@ -3,8 +3,8 @@ framework:
     csrf_protection: true
 
     session:
-        cookie_lifetime: 172800
-        gc_maxlifetime: 172800
+        cookie_lifetime: 10
+        gc_maxlifetime: 10
 
 when@test:
     framework:
